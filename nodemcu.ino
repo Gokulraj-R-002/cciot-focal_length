@@ -18,12 +18,27 @@ char ssid[] = "";
 char pass[] = "";
 
 
-float curr_pos = 0, new_pos;
+float curr_obj_pos = 0, curr_scr_pos = 0;
+float new_obj_pos, new_scr_pos;
+
+int recalibrate = 0;
+
+void Recalibrate() {
+  
+}
 
 SoftwareSerial serial_info_to_arduino(D2, D3); // Rx and Tx pins
 
 BLYNK_WRITE(V0) {
-  new_pos = param.asFloat();
+  new_obj_pos = param.asFloat();
+}
+
+BLYNK_WRITE(V1) {
+  new_scr_pos = param.asFloat();
+}
+
+BLYNK_WRITE(V2) {
+  recalibrate = param.asInt();
 }
 
 void setup() {
@@ -38,17 +53,33 @@ void setup() {
 void loop() {
   Blynk.run();
 
-  if (new_pos == curr_pos) {
-    serial_info_to_arduino.println("0");
+  if (recalibrate == 1) {
+    Recalibrate();
   }
 
-  else if (new_pos < curr_pos) {
-    serial_info_to_arduino.println("1");
+  // update the object position
+  if (new_obj_pos == curr_obj_pos) {
+    serial_info_to_arduino.println("O+0");
+  }
+  else if (new_obj_pos < curr_obj_pos) {
+    serial_info_to_arduino.println("O-1");
+    curr_pos = new_pos;
+  }
+  else if (new_obj_pos > curr_scr_pos) {
+    serial_info_to_arduino.println("O+1");
     curr_pos = new_pos;
   }
 
-  else if (new_pos > curr_pos) {
-    serial_info_to_arduino.println("2");
-    curr_pos = new_pos;
+  // update the screen position
+  if (new_scr_pos == curr_scr_pos) {
+    serial_info_to_arduino.println("I+0");
+  }
+  else if (new_scr_pos < curr_scr_pos) {
+    serial_info_to_arduino.println("I-1");
+    curr_scr_pos = new_scr_pos;
+  }
+  else if (new_scr_pos > curr_scr_pos) {
+    serial_info_to_arduino.println("I+1");
+    curr_scr_pos = new_scr_pos;
   }
 }
