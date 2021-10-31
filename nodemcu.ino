@@ -36,16 +36,12 @@ int obj_StepsToTake = 0, scr_StepsToTake = 0 ;
 float obj_Recallibrate(float obj_dist) {
   obj_dist = 9.5;
   Blynk.virtualWrite(2, 9.5);
-    Serial.print(obj_endpin1);
 
   obj_end1 = digitalRead(obj_endpin1);
 
   while(obj_end1 != 1) {
-    Serial.println(obj_end1);
-
     obj_end1 = digitalRead(obj_endpin1);
     serial_info_to_arduino.println("O" + String(-1));
-    delay(50);
   }
 
   obj_end1 = 0;
@@ -56,16 +52,11 @@ float scr_Recallibrate(float scr_dist) {
     scr_dist = 9.5;
     Blynk.virtualWrite(3, 9.5);
 
-    Serial.println(scr_endpin1);
     scr_end1 = digitalRead(scr_endpin1);
-    Serial.println(scr_end1);
 
     while(scr_end1 != 1) {
       scr_end1 = digitalRead(scr_endpin1);
-      Serial.println('c');
-      Serial.println(scr_end1);
       serial_info_to_arduino.println("S"+ String(-1));
-
     }
     scr_end1 = 0;
     return scr_dist;
@@ -83,7 +74,6 @@ void setup() {
   // for recallibration at the start of the setup
   obj_dist = obj_Recallibrate(obj_dist);
   scr_dist = scr_Recallibrate(scr_dist);
-
 }
 
 BLYNK_WRITE(V2) {
@@ -122,6 +112,7 @@ void loop()  {
   serial_info_to_arduino.println("O"+ String(obj_StepsToTake));
   serial_info_to_arduino.println("S"+ String(scr_StepsToTake));
 
+  // update the previous distances
   prev_obj = obj_dist;
   prev_scr = scr_dist;
 
