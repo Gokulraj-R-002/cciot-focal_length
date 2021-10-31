@@ -33,30 +33,40 @@ float prev_scr = 9.5;
 int obj_StepsToTake = 0, scr_StepsToTake = 0 ;
 
 
+// function for object recalibration
 float obj_Recallibrate(float obj_dist) {
-  obj_dist = 9.5;
-  Blynk.virtualWrite(2, 9.5);
+    // set the distance to 9.5 (cm), which is the closet the object can get to the lens
+    obj_dist = 9.5;
+    Blynk.virtualWrite(2, 9.5);
 
-  obj_end1 = digitalRead(obj_endpin1);
+    obj_end1 = digitalRead(obj_endpin1);
 
-  while(obj_end1 != 1) {
+    // read the state of endpin
+    // if the endpin is high, the object has reached the end of the track (i.e., 9.5 cm from the lens)
+    // until the endpin is high, keep moving the object towards the lens
+    while(obj_end1 != 1) {
     obj_end1 = digitalRead(obj_endpin1);
     serial_info_to_arduino.println("O" + String(-1));
-  }
+    }
 
-  obj_end1 = 0;
-  return obj_dist;
+    obj_end1 = 0;
+    return obj_dist;
 }
 
+// function for image recalibration
 float scr_Recallibrate(float scr_dist) {
+    // set the distance to 9.5 (cm), which is the closet the screen can get to the lens
     scr_dist = 9.5;
     Blynk.virtualWrite(3, 9.5);
 
     scr_end1 = digitalRead(scr_endpin1);
 
+    // read the state of endpin
+    // if the endpin is high, the screen has reached the end of the track (i.e., 9.5 cm from the lens)
+    // until the endpin is high, keep moving the screen towards the lens
     while(scr_end1 != 1) {
-      scr_end1 = digitalRead(scr_endpin1);
-      serial_info_to_arduino.println("S"+ String(-1));
+        scr_end1 = digitalRead(scr_endpin1);
+        serial_info_to_arduino.println("S"+ String(-1));
     }
     scr_end1 = 0;
     return scr_dist;
@@ -98,8 +108,8 @@ void loop()  {
     prev_obj = 0;
     prev_scr = 0;
 
-    obj_dist = obj_Recallibrate(obj_dist);
-    scr_dist = scr_Recallibrate(scr_dist);
+    obj_dist = obj_Recallibrate(obj_dist); // recalibrate the object
+    scr_dist = scr_Recallibrate(scr_dist); // recalibrate the image
 
     Blynk.virtualWrite(4, 0);
   }
