@@ -1,6 +1,8 @@
 # CCIoT Project - Group 15
 ## Remote Triggered Lab - Focal length Experiment
 
+To see how everything is setup and how everything works, click [here](https://github.com/Gokulraj-R-002/cciot-focal_length/blob/main/CC-Iot_Team15.pdf)
+
 ### Instructions for using these files
 
 * Upload the nodemcu.ino to the NodeMCU.
