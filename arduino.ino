@@ -2,7 +2,12 @@
 #include <Stepper.h>
 
 SoftwareSerial serial_info_from_nodemcu(3, 2); // Rx and Tx pins
-
+//Contributors
+//Rohan Gupta
+//Rishabh Anup Agrawal
+//Gokulraj R
+//Sreya Garapati
+//Sushil Kumar
 const int stepPerRev = 200;
 Stepper obj_stepper(stepPerRev, 13, 12, 11, 10); // pins 10, 11, 12 and 13 are used to control the motor
 Stepper scr_stepper(stepPerRev, 4, 5, 6, 7);
